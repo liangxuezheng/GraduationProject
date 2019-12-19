@@ -1,0 +1,26 @@
+server:
+  port: 8082
+  context-path: /gra
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 3000
+  #邮件发送配置
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    username: 1609078897@qq.com
+    password: tgnwosxbzpwyigeg
+    protocol: smtp
+    port: 25
+  session:
+    store-type: redis
+# 七牛云配置
+# bucket是创建的存储空间名
+# path对应存储空间的访问域名
+qiniu:
+  accessKey: TwE61mwkAtplcNEYI2XEoI2TvdGyCgjlXlNl1XEM
+  secretKey: uOCxpp_CTLIHMzvwTp0rzdZyTPf3Qbhixwasixg_
+  bucket: img
+  path: http://xxx.bkt.clouddn.com

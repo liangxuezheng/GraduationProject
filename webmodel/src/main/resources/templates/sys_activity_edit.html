@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title> - Bootstrap Table - 素材牛模板演示</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+
+    <link rel="shortcut icon" th:href="favicon.ico"/>
+    <link th:href="@{css/bootstrap.min.css?v=3.3.6}" rel="stylesheet"/>
+    <link th:href="@{css/font-awesome.css?v=4.4.0}" rel="stylesheet"/>
+    <link th:href="@{css/plugins/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/animate.css}" rel="stylesheet"/>
+    <link th:href="@{css/style.css?v=4.1.0}" rel="stylesheet"/>
+
+    <!-- layui样式 -->
+    <link rel="stylesheet" th:href="@{layui/css/layui.css}"/>
+    <!-- 模态框  -->
+    <link th:href="@{dialog/css/bootstrap-dialog.css}" rel="stylesheet" type="text/css" />
+    <!-- layui提示框  -->
+    <script th:src="@{layui/layui.all.js}"></script>
+
+
+<style type="text/css">
+.ren-top-8{
+}
+.col-md-4{
+	height: 35px;
+}
+.col-md-2-div{
+
+float:right;
+
+}
+.row-body{
+margin-top:15px;
+margin-left:15px;
+width: 500px;
+}
+.ren-top-8 span{
+ margin-top:2px;
+ float: right;
+}
+.ren-top-8 label{
+ float: left;
+}
+.aaaa {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+#jiazaidonghua{
+ position: absolute;
+ top:47%;
+ left: 47%;
+ z-index: 999;
+ display: none;
+}
+select {
+font-size: 8px;
+}
+
+
+.modal-dialog
+{
+ height:90%;
+}
+.modal-content
+{
+}
+.modal-body
+{
+height: 350px;
+  overflow-y:scroll;
+
+}
+.dropdown menu{
+        z-index: 1000;
+    }
+
+
+</style>
+</head>
+
+<body class="gray-bg">
+                            
+  <div id="jiazaidonghua" class="sk-spinner sk-spinner-three-bounce">
+                                <div class="sk-bounce1"></div>
+                                <div class="sk-bounce2"></div>
+                                <div class="sk-bounce3"></div>
+                            </div>
+          
+            
+ 					<form method="get" class="form-horizontal">
+                            <div class="form-group" id="ypmc">
+                                <label class="col-sm-4 control-label"><span style="color:red;">*</span>活动标题</label>
+
+                                <div class="col-sm-6">
+                                    <input id="act_xjname" type="text" class="form-control"/>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="color:red;">*</span>活动时间</label>
+
+                            <div class="col-sm-6">
+                                <input readonly="readonly" placeholder="开始日期" id="start2" class="form-control layer-date"/>
+                                ~
+                                <input readonly="readonly" placeholder="结束日期" id="end2" class="form-control layer-date"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <label class="col-sm-4 control-label"><span style="color:red;">*</span>活动内容：</label>
+                                <div class="col-sm-6">
+                                    <textarea id="act_xjbody" style="resize:none;"  name="act_body" class="form-control" aria-required="true"></textarea>
+                                </div>
+                               
+                            </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="color:red;">*</span>优惠率：</label>
+                            <div class="col-sm-6">
+                            <select
+                                    class="selectpicker show-tick form-control"
+                                    style="font-size: 12px;" id="act_yhl">
+                                <option value="">请选择</option>
+                                <option value="0.9">9折</option>
+                                <option value="0.8">8折</option>
+                                <option value="0.7">7折</option>
+                                <option value="0.6">6折</option>
+                                <option value="0.5">5折</option>
+                                <option value="0.4">4折</option>
+                                <option value="0.3">3折</option>
+                                <option value="0.2">2折</option>
+                                <option value="0.1">1折</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        </form>
+            
+            
+            
+           
+        
+        <!-- End Panel Other -->
+
+    <!-- 全局js -->
+     <script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+    <script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+
+  <!-- 自定义js -->
+  <script
+          th:src="@{js/content.js?v=1.0.0}"></script>
+  <script
+          th:src="@{/js/bootstrap-switch.min.js}"></script>
+
+  <script th:src="@{js/plugins/layer/laydate/laydate.js}"></script>
+  <script th:src="@{/js/myjs/activity.js}"></script>
+<script type="text/javascript">
+
+    //日期范围限制
+    var start2 = {
+        elem : '#start2',
+        format : 'YYYY/MM/DD hh:mm:ss',
+        min : laydate.now(), //设定最小日期为当前日期
+        max : '2099-06-16 23:59:59', //最大日期
+        istime : true,
+        istoday : false
+
+    };
+    var end2 = {
+        elem : '#end2',
+        format : 'YYYY/MM/DD hh:mm:ss',
+        min : laydate.now(),
+        max : '2099-06-16 23:59:59',
+        istime : true,
+        istoday : false
+
+    };
+    laydate(start2);
+    laydate(end2);
+</script>
+
+
+</body>
+
+</html>

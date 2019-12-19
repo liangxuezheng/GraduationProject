@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxz.mapper.ActivityMapper">
+   <!--新建活动-->
+    <insert id="addActivity" parameterType="Activity">
+        insert into activity(act_name,creat_time,end_time,act_body,act_yhl) values (#{act_name},#{creat_time},#{end_time},#{act_body},#{act_yhl})
+    </insert>
+    <!--搜索活动-->
+    <select id="queryActivity" parameterType="Activity" resultType="Activity">
+        select *
+        from activity
+        where 1=1
+        <if test="act_name!=null and act_name!=''">
+           and act_name like CONCAT('%',#{act_name},'%')
+        </if>
+        <if test="act_body!=null and act_body!=''">
+           and act_body like CONCAT('%',#{act_body},'%')
+        </if>
+        <if test="start!=null and start!=''">
+           and creat_time &gt; #{start}
+        </if>
+        <if test="end!=null and end!=''">
+            and end_time &lt; #{end }
+        </if>
+    </select>
+    <!--删除活动-->
+    <delete id="delActivity" parameterType="Activity">
+        delete from activity where act_aid=#{act_aid}
+    </delete>
+    <!--修改活动状态-->
+    <update id="updActivity" parameterType="Activity">
+        update activity set state=#{state} where act_aid=#{act_aid}
+    </update>
+    <select id="getActivity" resultType="Activity">
+        select * from activity where state=1
+        and creat_time &lt; SYSDATE() and end_time &gt; SYSDATE()
+    </select>
+</mapper>

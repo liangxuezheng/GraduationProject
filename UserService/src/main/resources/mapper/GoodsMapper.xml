@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxz.mapper.GoodsMapper">
+    <!--上架商品-->
+    <insert id="insertGood">
+        insert into goods(shop_sid,good_name,good_info,good_liebei,good_price,good_hdprice,good_ynact,good_p1,good_p2,good_p3,good_p4)
+        values (#{shop_sid},#{good_name},#{good_info},#{good_liebei},#{good_price},#{good_price},#{good_ynact},#{good_p1},#{good_p2},#{good_p3},#{good_p4})
+    </insert>
+    <!--搜索个人商品-->
+    <select id="selGoodsBySid" resultType="Goods">
+        select * from goods where shop_sid=#{shop_sid}
+    </select>
+    <!--单个商品-->
+    <select id="selGoodsByGid" resultType="Goods">
+        select * from goods where good_gid=#{good_gid}
+    </select>
+    <!--搜索所有商品-->
+    <select id="selAllGoods" parameterType="Goods" resultType ="Goods">
+        select * from goods
+        where 1=1
+        <if test="good_liebei !=null and good_liebei !=''">
+            and good_liebei=#{good_liebei}
+        </if>
+        <if test="good_name !=null and good_name !=''">
+             and good_name LIKE CONCAT('%',#{good_name},'%')
+        </if>
+    </select>
+    <!--下架商品-->
+    <delete id="deleteGood">
+        delete from goods where good_gid=#{good_gid}
+    </delete>
+    <!--加入购物车-->
+    <insert id="insertShip">
+        insert into shipping(user_uid,good_gid,good_name,good_jianjie,good_p1,good_price) values (#{user_uid},#{good_gid},#{good_name},#{good_jianjie},#{good_p1},#{good_price})
+    </insert>
+    <!--搜索-->
+    <select id="selShipByUid" resultType="Shipping">
+        select * from shipping where user_uid=#{user_uid}
+    </select>
+    <!--清空购物车-->
+    <delete id="delShipBySid">
+        delete from shipping where good_gid=#{good_gid}
+    </delete>
+</mapper>

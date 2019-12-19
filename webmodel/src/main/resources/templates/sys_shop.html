@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<style>
+
+</style>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+	<title>店铺审核</title>
+	<meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+
+	<link rel="shortcut icon" th:href="favicon.ico"/>
+	<link th:href="@{css/bootstrap.min.css?v=3.3.6}" rel="stylesheet"/>
+	<link th:href="@{css/font-awesome.css?v=4.4.0}" rel="stylesheet"/>
+	<link th:href="@{css/plugins/bootstrap-table/bootstrap-table.min.css}" rel="stylesheet"/>
+	<link th:href="@{css/animate.css}" rel="stylesheet"/>
+	<link th:href="@{css/style.css?v=4.1.0}" rel="stylesheet"/>
+
+	<!-- layui样式 -->
+	<link rel="stylesheet" th:href="@{layui/css/layui.css}"/>
+	<!-- 模态框  -->
+	<link th:href="@{dialog/css/bootstrap-dialog.css}" rel="stylesheet" type="text/css" />
+	<!-- layui提示框  -->
+	<script th:sr="@{layui/layui.all.js}"></script>
+	<style>
+		/**字符串过长 转化为 。。。**/
+		table{
+			width:100px;
+			table-layout:fixed;/* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
+		}
+		td{
+			width:100%;
+			word-break:keep-all;/* 不换行 */
+			white-space:nowrap;/* 不换行 */
+			overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+			text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
+			-o-text-overflow:ellipsis;
+			-icab-text-overflow: ellipsis;
+			-khtml-text-overflow: ellipsis;
+			-moz-text-overflow: ellipsis;
+			-webkit-text-overflow: ellipsis;
+		}
+		.form-group {
+			margin-top: 15px;
+		}
+		.form-group button{
+			margin-bottom: 0px !important;
+		}
+	</style>
+
+
+</head>
+<body class="gray-bg">
+<!-- Panel Other -->
+<div class="ibox float-e-margins">
+	<div class="ibox-title">
+		<label for="i_name">审核中心/身份证审核<input id="pageNumber" type="hidden"/><input id="pageSize" type="hidden"/></label>
+	</div>
+	<div class="ibox-content">
+		<div class="row row-lg">
+			<div class="col-sm-12">
+				<!-- Example Card View -->
+				<div class="example-wrap">
+					<div class="col-sm-12">
+						<!-- End Example Toolbar -->
+						<form role="form" class="form-inline pull-left">
+							<div class="form-group">
+								<label for="i_name">店铺名称&nbsp;</label>
+								<input id="shop_name" class="form-control" placeholder="请输入店铺名称"/>
+							</div>
+							&nbsp;&nbsp;&nbsp;
+							<div class="form-group">
+								<label for="i_name">审核状态&nbsp;</label> <select
+									class="selectpicker show-tick form-control"
+									style="font-size: 12px;" id="shop_state">
+								<option value="">请选择</option>
+								<option value="已审核">已审核</option>
+								<option value="未审核">未审核</option>
+							</select>
+							</div>
+							<div style="margin-left:50px;" class="form-group">
+								<button id="queryBtn" class="btn btn-info " type="button"><i class="glyphicon glyphicon-search"></i> <span class="bold">查询</span></button>
+								<button  class="btn btn-primary " id="reset" type="reset">
+									<i class="glyphicon glyphicon-repeat"></i> <span class="bold">重置</span>
+								</button>
+							</div>
+						</form>
+					</div>
+					<table id="table"></table>
+				</div>
+				<!-- End Example Card View -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Panel Other -->
+
+<!-- 全局js -->
+<script th:src="@{js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{js/bootstrap.min.js?v=3.3.6}"></script>
+
+<!-- 自定义js -->
+<script
+		th:src="@{js/content.js?v=1.0.0}"></script>
+<script
+		th:src="@{/js/bootstrap-switch.min.js}"></script>
+
+<!-- Bootstrap table -->
+<script th:src="@{js/plugins/bootstrap-table/bootstrap-table.min.js}"></script>
+<script th:src="@{js/plugins/bootstrap-table/bootstrap-table-mobile.min.js}"></script>
+<script th:src="@{js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{dialog/js/bootstrap-dialog.js}"></script>
+<script th:src="@{table_export/tableExport.js}"></script>
+
+
+<script th:src="@{js/plugins/layer/laydate/laydate.js}"></script>
+<script th:src="@{js/myjs/shop_shenhe.js}"></script>
+
+</body>
+</html>

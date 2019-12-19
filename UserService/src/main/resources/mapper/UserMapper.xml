@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxz.mapper.UserMapper">
+    <!--注册-->
+    <insert id="insertUser" parameterType="User">
+        insert into user(user_phone,user_pass,user_salt) VALUES (#{user_phone},#{user_pass},#{user_salt})
+    </insert>
+    <!--修改密码-->
+    <update id="updatePass">
+        update user set user_pass=#{user_pass} where user_uid=#{user_uid}
+    </update>
+    <!--登录-->
+    <select id="selUserByPhone" resultType="User">
+        select * from user where user_phone=#{user_phone}
+    </select>
+    <select id="selUser" resultType="User">
+        select * from user where user_phone=#{user_phone} and user_pass=#{user_pass}
+    </select>
+
+    <!--完善个人信息-->
+    <insert id="insertUserInfo">
+        insert into userinfo(user_uid) values (#{user_uid})
+    </insert>
+    <update id="insertInfo">
+        update userinfo set info_nc=#{info_nc},info_name=#{info_name},info_idcard=#{info_idcard},info_sex=#{info_sex},
+        info_school=#{info_school},info_qq=#{info_qq},info_touxiang=#{info_touxiang} where user_uid=#{user_uid}
+    </update>
+    <!--搜索个人信息-->
+    <select id="selUserInfoByUid" resultType="UserInfo">
+        select * from userinfo where user_uid=#{user_uid}
+    </select>
+    <!--邮箱认证-->
+    <update id="updateUserEmail">
+        update userinfo set info_email=#{info_email},email_code=#{email_code},email_state="已认证" where user_uid=#{user_uid}
+    </update>
+    <!--申请商铺-->
+    <insert id="insertUserShop">
+        insert into usershop(user_uid,shop_name,shop_jianjie) values (#{user_uid},#{shop_name},#{shop_jianjie})
+    </insert>
+    <select id="selUserShopByUid" resultType="UserShop">
+        select shop_sid,user_uid, shop_name,shop_state,shop_jianjie,DATE_FORMAT(shop_time, '%Y-%m-%d %H:%i:%s') shop_time from usershop  where user_uid=#{user_uid}
+    </select>
+    <!--添加地址-->
+    <insert id="insertShipAddress">
+        insert into shipaddress(user_uid,add_name,add_address,add_phone,add_flag) values (#{user_uid},#{add_name},#{add_address}
+        ,#{add_phone},#{add_flag})
+    </insert>
+    <!--搜索地址-->
+    <select id="selAddressByUid" resultType="ShipAddress">
+        select * from shipaddress where user_uid=#{user_uid}
+    </select>
+    <!--修改地址-->
+    <update id="updShipAddress">
+        update shipaddress set add_name=#{add_name},add_address=#{add_address},add_phone=#{add_phone} where user_uid=#{user_uid}
+    </update>
+
+    <select id="queryMember" parameterType="UserInfo" resultType="UserInfo">
+        select * from userinfo ui
+left join user u on u.user_uid=ui.user_uid
+where u.user_flag=2
+    <if test="user_phone!=null and user_phone!=''">
+      and  u.user_phone like  CONCAT('%',#{user_phone},'%')
+    </if>
+        <if test="idcard_state!=null and idcard_state!=''">
+            and  ui.idcard_state=#{idcard_state}
+        </if>
+    </select>
+    <select id="queryShop" parameterType="UserShop" resultType="UserShop">
+        select shop_sid,user_uid, shop_name,shop_state,shop_jianjie,DATE_FORMAT(shop_time, '%Y-%m-%d %H:%i:%s') shop_time
+         from usershop  where 1=1
+        <if test="shop_name!=null and shop_name!=''">
+            and  shop_name like  CONCAT('%',#{shop_name},'%')
+        </if>
+        <if test="shop_state!=null and shop_state!=''">
+            and  shop_state=#{shop_state}
+        </if>
+    </select>
+
+    <update id="shenhe_idcard" parameterType="UserInfo">
+        update userinfo set idcard_state=#{idcard_state} where info_id=#{info_id}
+    </update>
+    <update id="shenhe_shop" parameterType="UserShop">
+        update usershop set shop_state=#{shop_state} where shop_sid=#{shop_sid}
+    </update>
+</mapper>

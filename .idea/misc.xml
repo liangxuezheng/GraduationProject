@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/FileTools" />
+    <file type="web" url="file://$PROJECT_DIR$/goodservice" />
+    <file type="web" url="file://$PROJECT_DIR$/goodsService" />
+    <file type="web" url="file://$PROJECT_DIR$/UserService" />
+    <file type="web" url="file://$PROJECT_DIR$/UserServiceImpl" />
+    <file type="web" url="file://$PROJECT_DIR$/UserServiceModel" />
+    <type id="Spring" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/controllermodel/pom.xml" />
+        <option value="$PROJECT_DIR$/webmodel/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/GoodService/pom.xml" />
+        <option value="$PROJECT_DIR$/GoodsService/pom.xml" />
+        <option value="$PROJECT_DIR$/UserServiceImpl/pom.xml" />
+        <option value="$PROJECT_DIR$/UserServiceModel/pom.xml" />
+        <option value="$PROJECT_DIR$/aawdasd/pom.xml" />
+        <option value="$PROJECT_DIR$/goodsService/pom.xml" />
+        <option value="$PROJECT_DIR$/goodservice/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

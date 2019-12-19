@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>申请商铺</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap-combined.min.css}"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"/>
+    <script type="text/javascript">
+            $(function () {
+                //邮箱判断是否认证
+                $("#anzx").click(function () {
+                    $.ajax({
+                        url:"http://localhost:8082/gra/per_info_success.action",
+                        type:"post",
+                        dataType:"text",
+                        success:function (data) {
+                            var userinfo=eval('('+data+')');
+                            var email_state=userinfo.email_state;
+                            if (email_state=="已认证") {
+                                window.location.href="/web/certified_success"
+                            }else {
+                                window.location.href="/web/security_center"
+                            }
+
+                        }
+                    })
+                })
+                //申请商铺
+                $("#sqshop").click(function () {
+                    var shop_name=$("#shop_name").val();
+                    var shop_jianjie=$("#shop_jianjie").val();
+                    $.ajax({
+                        url:"http://localhost:8082/gra/apply_shop.action",
+                        type:"post",
+                        data:{"shop_name":shop_name,"shop_jianjie":shop_jianjie},
+                        dataType:"text",
+                        success:function (data) {
+                            alert("申请成功，请等待审核结果！")
+                            window.location.href="/web/apply_shop_success"
+                        }
+                    })
+                })
+                //判断商铺是否审核通过
+                $("#myshop").click(function () {
+                    $.ajax({
+                        url:"http://localhost:8082/gra/user_shop.action",
+                        type:"post",
+                        dataType:"text",
+                        success:function (data) {
+                            var shop=eval('('+data+')');
+                            var shop_state=shop.shop_state;
+                            if(shop_state=="已审核"){
+                                window.location.href="/web/my_shop"
+                            }else if (shop_state=="审核中") {
+                                alert("您申请的商铺正在审核中，请耐心等待！！")
+                            }else {
+                                alert("您还未申请商铺")
+                            }
+                        }
+                    })
+                })
+            })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                    个人中心
+                </h1>
+            </div>
+    <div class="row-fluid">
+        <div class="span2">
+            <ul class="nav nav-list">
+                <li class="">
+                    <a href="/web/">返回首页</a>
+                </li>
+                <li class="nav-header">
+                    会员中心
+                </li>
+                <li>
+                    <a href="/web/member">用户信息</a>
+                </li>
+                <li>
+                    <a href="/web/perfect_information">完善基本信息</a>
+                </li>
+                <li>
+                    <a href="#" id="anzx">安全中心</a>
+                </li>
+                <li class="nav-header">
+                    购物车
+                </li>
+                <li>
+                    <a href="/web/my_shipping">我的购物车</a>
+                </li>
+                <li class="nav-header">
+                    订单中心
+                </li>
+                <li>
+                    <a href="/web/my_order">我的订单</a>
+                </li>
+                <li>
+                    <a href="/web/tj_address">收货地址</a>
+                </li>
+                <li class="nav-header">
+                    店铺管理
+                </li>
+                <li class="active">
+                    <a href="#">申请商铺</a>
+                </li>
+                <li>
+                    <a href="#" id="myshop">进入商铺</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span10">
+            <fieldset>
+                <legend>申请商铺</legend>
+            <form action="" method="post" class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">商铺名称</label>
+                    <div class="controls">
+                        <input id="shop_name" name="shop_name" type="text" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">商铺简介</label>
+                    <div class="controls">
+                        <input id="shop_jianjie" name="shop_jianjie" type="text"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="button" class="btn" id="sqshop" value="申请"/>
+                    </div>
+                </div>
+            </form>
+            </fieldset>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{js/canvas-nest.js}" color="47.135.193" opacity="0.7" count="125"></script>
+</body>
+</html>

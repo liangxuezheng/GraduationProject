@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>登录</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/style2.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#dl").click(function () {
+                var user_phone=$("#user_phone").val();
+                var user_pass=$("#user_pass").val();
+                $.ajax({
+                    url:"http://localhost:8082/gra/login.action",
+                    type:"post",
+                    data:{"user_phone":user_phone,"user_pass":user_pass},
+                    dataType:"text",
+                    success:function (data) {
+                        if(data==''){
+                            alert("登录失败")
+                        }
+                        var u=eval('('+data+')');
+                        var user_uid=u.user_uid;
+                        if (u.user_flag==2) {
+                            alert("会员登录成功!!")
+                            window.location.href="/web/member";
+                        }else if (u.user_flag==1){
+                            alert("平台管理员登录成功!!")
+                        }else {
+                            alert("登录失败!!")
+                        }
+
+                    },
+                    error:function (data) {
+                        alert("error:::"+data);
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<!--Begin Login Begin-->
+<div class="log_bg">
+    <div class="top">
+
+    </div>
+    <div class="login">
+        <div class="log_img"><img th:src="@{images/dltp.png}" width="611" height="425" /></div>
+        <div class="log_c">
+            <form method="post" action="">
+                <table border="0" style="width:370px; font-size:14px; margin-top:30px;" cellspacing="0" cellpadding="0">
+                    <tr height="50" valign="top">
+                        <td width="55">&nbsp;</td>
+                        <td>
+                            <span class="fl" style="font-size:24px;">登录</span>
+                            <span class="fr">还没有账号，<a href="/web/regist" style="color:#ff4e00;">立即注册</a></span>
+                        </td>
+                    </tr>
+                    <tr height="70">
+                        <td>用户名</td>
+                        <td><input type="text" id="user_phone" name="user_phone" class="l_user" /></td>
+                    </tr>
+                    <tr height="70">
+                        <td>密&nbsp; &nbsp; 码</td>
+                        <td><input type="password" id="user_pass" name="user_pass" class="l_pwd" /></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td style="font-size:12px; padding-top:20px;">
+                            <span class="fr"><a href="/web/xiugai_pass" style="color:#ff4e00;">忘记密码</a></span>
+                        </td>
+                    </tr>
+                    <tr height="60">
+                        <td>&nbsp;</td>
+                        <td><input type="button" id="dl" value="登录" style="background: #2f96b4" class="log_btn"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<!--End Login End-->
+</body>
+</html>

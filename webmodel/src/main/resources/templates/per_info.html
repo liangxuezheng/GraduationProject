@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>完善个人信息</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap-combined.min.css}"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#ws").click(function () {
+                var info_nc=$("#info_nc").val();
+                var info_name=$("#info_name").val();
+                var  info_idcard=$("#info_idcard").val();
+                var  info_school=$("#info_school").val();
+                var info_sex=$('input:radio:checked').val();
+                var  info_qq=$("#info_qq").val();
+                var info_touxiang=$("#info_touxiang").val();
+                if(info_touxiang=="" || info_touxiang==null){
+                    alert("请上传图片！！")
+                    return false;
+                }
+                $.ajax({
+                    url:"http://localhost:8082/gra/per_info.action",
+                    type:"post",
+                    data:{"info_nc":info_nc,"info_name":info_name,"info_idcard":info_idcard,"info_school":info_school,"info_sex":info_sex,"info_qq":info_qq,"info_touxiang":info_touxiang,},
+                    dataType:"text",
+                    success:function (data) {
+                        window.location.href="/web/member"
+                    }
+                })
+            })
+            $("#shangchuan").click(function () {
+                var formDate=new FormData($("#myform")[0]);
+                $.ajax({
+                    url:"http://localhost:8084/file/file_update.action",
+                    type:"post",
+                    data:formDate,
+                    processData: false,
+                    contentType: false,
+                    success:function (data) {
+                        alert("上传成功！！")
+                        $("#info_touxiang").val(data);
+                    }
+                })
+            })
+            //邮箱判断是否认证
+            $("#anzx").click(function () {
+                $.ajax({
+                    url:"http://localhost:8082/gra/per_info_success.action",
+                    type:"post",
+                    dataType:"text",
+                    success:function (data) {
+                        var userinfo=eval('('+data+')');
+                        var email_state=userinfo.email_state;
+                        if (email_state=="已认证") {
+                            window.location.href="/web/certified_success"
+                        }else {
+                            window.location.href="/web/security_center"
+                        }
+
+                    }
+                })
+            })
+            //判断商铺是否申请
+            $("#sqsp").click(function () {
+                $.ajax({
+                    url: "http://localhost:8082/gra/user_shop.action",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        var usershop = eval('(' + data + ')');
+                        var shop_state = usershop.shop_state;
+                        if (shop_state == "审核中"||shop_state=="已审核") {
+                            window.location.href = "/web/apply_shop_success"
+                        } else {
+                            window.location.href = "/web/apply_shop"
+                        }
+
+                    }
+                })
+            })
+            //判断商铺是否审核通过
+            $("#myshop").click(function () {
+                $.ajax({
+                    url:"http://localhost:8082/gra/user_shop.action",
+                    type:"post",
+                    dataType:"text",
+                    success:function (data) {
+                        var shop=eval('('+data+')');
+                        var shop_state=shop.shop_state;
+                        if(shop_state=="已审核"){
+                            window.location.href="/web/my_shop"
+                        }else if (shop_state=="审核中") {
+                            alert("您申请的商铺正在审核中，请耐心等待！！")
+                        }else {
+                            alert("您还未申请商铺")
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                    个人中心
+                </h1>
+            </div>
+    <div class="row-fluid">
+        <div class="span2">
+            <ul class="nav nav-list">
+                <li class="">
+                    <a href="/web/">返回首页</a>
+                </li>
+                <li class="nav-header">
+                    会员中心
+                </li>
+                <li>
+                    <a href="/web/member">用户信息</a>
+                </li>
+                <li class="active">
+                    <a href="/web/perfect_information">完善基本信息</a>
+                </li>
+                <li>
+                    <a href="#" id="anzx">安全中心</a>
+                </li>
+                <li class="nav-header">
+                    购物车
+                </li>
+                <li>
+                    <a href="/web/my_shipping">我的购物车</a>
+                </li>
+                <li class="nav-header">
+                    订单中心
+                </li>
+                <li>
+                    <a href="/web/my_order">我的订单</a>
+                </li>
+                <li>
+                    <a href="/web/tj_address">收货地址</a>
+                </li>
+                <li class="nav-header">
+                    店铺管理
+                </li>
+                <li>
+                    <a href="#" id="sqsp">申请商铺</a>
+                </li>
+                <li>
+                    <a href=""  id="myshop">进入商铺</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span10">
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <h4>
+                    提示!
+                </h4> <strong>注意!</strong> 信息一旦完善，不可修改，请认真填写
+            </div>
+            <fieldset>
+                <legend>完善个人信息</legend>
+                <div class="form-horizontal">
+                    <div class="control-group"><label class="control-label">昵称</label>
+                        <div class="controls"><input id="info_nc" name="info_nc" type="text" /></div>
+                    </div>
+                    <div class="control-group"><label class="control-label">真实姓名</label>
+                        <div class="controls"><input id="info_name" name="info_name" type="text" /></div>
+                    </div>
+                    <div class="control-group"><label class="control-label">身份证</label>
+                        <div class="controls"><input id="info_idcard" name="info_idcard" type="text" /></div>
+                    </div>
+                    <div class="control-group"><label class="control-label">性别</label>
+                        <div class="controls">
+                        <input type="radio" name="info_sex" checked="checked" value="男"/>男
+                        <input type="radio" name="info_sex" value="女"/>女<br/></div>
+                    </div>
+                    <div class="control-group"><label class="control-label">学校</label>
+                        <div class="controls"><input id="info_school" name="info_school" type="text" /></div>
+                    </div>
+                    <div class="control-group"><label class="control-label">QQ</label>
+                        <div class="controls"><input id="info_qq" name="info_qq" type="text" /></div>
+                    </div>
+                <form id="myform" action="" method="post" enctype="multipart/form-data">
+                    <div class="control-group"><label class="control-label">上传头像</label>
+                        <div class="controls"><input id="file" type="file" name="file" accept="image/*"/>
+                            <input type="button" value="上传图片" id="shangchuan"></input></div>
+                    </div>
+
+                </form><input id="info_touxiang" value="" type="hidden"/>
+                    <div class="control-group">
+                        <div class="controls">   <input id="ws" type="button" value="完善"/></div>
+                    </div>
+
+                </div>
+            </fieldset>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{js/canvas-nest.js}" color="47.135.193" opacity="0.7" count="125"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="CommModel" />
+        <module name="controllermodel" />
+        <module name="FileTools" />
+        <module name="UserService" />
+        <module name="webmodel" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="aawdasd" target="1.7" />
+      <module name="Goodservice" target="1.7" />
+      <module name="goodservice" target="1.7" />
+      <module name="GoodService" target="1.7" />
+      <module name="goodsService" target="1.7" />
+      <module name="GoodsService" target="1.7" />
+      <module name="ServiceModel" target="1.7" />
+      <module name="UserServiceModel" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

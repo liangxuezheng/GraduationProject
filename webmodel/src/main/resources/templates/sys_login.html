@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+    <title>管理员后台登录</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+
+    <link rel="shortcut icon" th:href="@{favicon.ico}"/>
+    <link type="text/css" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{css/font-awesome.css}" rel="stylesheet"/>
+
+    <link type="text/css" th:href="@{css/animate.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{css/style.css?v=4.1.0}" rel="stylesheet"/>
+
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#dl").click(function () {
+                var user_phone=$("#user_phone").val();
+                var user_pass=$("#user_pass").val();
+                $.ajax({
+                    url:"http://localhost:8082/gra/login.action",
+                    type:"post",
+                    data:{"user_phone":user_phone,"user_pass":user_pass},
+                    dataType:"text",
+                    success:function (data) {
+                        if(data==''){
+                            alert("登录失败")
+                        }
+                        var u=eval('('+data+')');
+                        var user_uid=u.user_uid;
+                        if (u.user_flag==2) {
+                            alert("会员登录成功！")
+                            window.location.href="/web/member";
+                        }else if (u.user_flag==1){
+                            alert("系统管理员登录成功！")
+                            window.location.href="/web/sys_index";
+                        }else {
+                            alert("登录失败")
+                        }
+
+                    },
+                    error:function (data) {
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 class="logo-name">h</h1>
+
+        </div>
+        <h3>欢迎使用跳瘙市场后台管理</h3>
+
+        <form method="post" action="" class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="用户名" id="user_phone" required="required"/>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="密码" id="user_pass" required="required"/>
+            </div>
+            <input type="button" id="dl" value="登录" class="btn btn-primary block full-width m-b"/>
+        </form>
+    </div>
+</div>
+<!-- 全局js -->
+<script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+</body>
+
+</html>

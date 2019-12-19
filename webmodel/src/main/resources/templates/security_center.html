@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>安全中心</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap-combined.min.css}"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            var res;
+            $("#sendCheckCode").click(function () {
+                var email = $("#info_email").val();
+                $.ajax({
+                    url: "http://localhost:8082/gra/getCheckCode.action",
+                    type: "post",
+                    data: {"email": email},
+                    dataType: "text",
+                    success: function (data) {
+                        res = data;
+                        alert("发送成功，请查收")
+                    }
+                })
+
+            })
+            $("#queren").click(function () {
+
+                var checkCode = $("#checkCode").val();
+                var info_email = $("#info_email").val();
+                if (res == checkCode) {
+                    $.ajax({
+                        url: "http://localhost:8082/gra/certified_mail.action",
+                        type: "post",
+                        data: {"info_email": info_email, "email_code": checkCode},
+                        dataType: "text",
+                        success: function (data) {
+                            alert("认证成功")
+                            window.location.href = "/web/certified_success";
+                        }
+                    })
+                } else {
+                    alert("信息不匹配，认证失败")
+                    return;
+                }
+            })
+            //判断商铺是否申请
+            $("#sqsp").click(function () {
+                $.ajax({
+                    url: "http://localhost:8082/gra/user_shop.action",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        var usershop = eval('(' + data + ')');
+                        var shop_state = usershop.shop_state;
+                        if (shop_state == "审核中" || shop_state == "已审核") {
+                            window.location.href = "/web/apply_shop_success"
+                        } else {
+                            window.location.href = "/web/apply_shop"
+                        }
+
+                    }
+                })
+            })
+            //判断商铺是否审核通过
+            $("#myshop").click(function () {
+                $.ajax({
+                    url: "http://localhost:8082/gra/user_shop.action",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        var shop = eval('(' + data + ')');
+                        var shop_state = shop.shop_state;
+                        if (shop_state == "已审核") {
+                            window.location.href = "/web/my_shop"
+                        } else if (shop_state == "审核中") {
+                            alert("您申请的商铺正在审核中，请耐心等待！！")
+                        } else {
+                            alert("您还未申请商铺")
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                    个人中心
+                </h1>
+            </div>
+    <div class="row-fluid">
+        <div class="span2">
+            <ul class="nav nav-list">
+                <li class="">
+                    <a href="/web/">返回首页</a>
+                </li>
+                <li class="nav-header">
+                    会员中心
+                </li>
+                <li>
+                    <a href="/web/member">用户信息</a>
+                </li>
+                <li>
+                    <a href="/web/perfect_information">完善基本信息</a>
+                </li>
+                <li class="active">
+                    <a href="/web/security_center">安全中心</a>
+                </li>
+                <li class="nav-header">
+                    购物车
+                </li>
+                <li>
+                    <a href="/web/my_shipping">我的购物车</a>
+                </li>
+                <li class="nav-header">
+                    订单中心
+                </li>
+                <li>
+                    <a href="/web/my_order">我的订单</a>
+                </li>
+                <li>
+                    <a href="/web/tj_address">收货地址</a>
+                </li>
+                <li class="nav-header">
+                    店铺管理
+                </li>
+                <li>
+                    <a href="#" id="sqsp">申请商铺</a>
+                </li>
+                <li>
+                    <a href="#" id="myshop">进入商铺</a>
+                </li>
+            </ul>
+        </div>
+        <div class="span10">
+            <fieldset>
+                <legend>安全中心</legend>
+                <form action="" method="post">
+                    <h3>邮箱认证</h3>
+                    邮箱：<input type="email" name="info_email" id="info_email"/><br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮箱验证码：</label>
+                        <div class="layui-input-block">
+                            <input id="checkCode" type="text" name="checkCode" class="layui-input" lay-verify="required"/><br/>
+                            <button id="sendCheckCode" type="button" class="layui-btn layui-btn-normal">获取验证码</button>
+                        </div>
+                    </div>
+                    <input type="button" id="queren" value="确认"/>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{js/canvas-nest.js}" color="47.135.193" opacity="0.7" count="125"></script>
+</body>
+</html>

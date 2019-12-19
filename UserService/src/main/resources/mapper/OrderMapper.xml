@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lxz.mapper.OrderMapper">
+    <!--生成订单-->
+    <insert id="insertOrder">
+        insert into orders(user_uid,add_aid,sh_sid,good_gid,good_name,order_allpri,order_time) values (#{user_uid},#{add_aid},#{sh_sid},#{good_gid},#{good_name},#{order_allpri},#{order_time})
+    </insert>
+    <select id="selorder_oid" resultType="Order">
+        select * from orders order by order_oid DESC limit 1
+    </select>
+    <!--搜索订单-->
+    <select id="selOrderByUid" resultType="Order">
+        select * from orders where user_uid=#{user_uid}
+    </select>
+    <!--更改订单-->
+    <update id="updateOrderByOid">
+        update orders set order_state=#{order_state},upda_time=#{upda_time} where order_oid=#{order_oid}
+    </update>
+<!--    &lt;!&ndash;订单详情&ndash;&gt;
+    <insert id="insertOrderDetail">
+        insert into orderdetail(order_oid,good_gid) values (#{order_oid},#{good_gid})
+    </insert>
+    &lt;!&ndash;搜索订单&ndash;&gt;
+    <select id="selOrderDetail">
+        select * from orderdetail where order_oid=#{order_oid}
+    </select>-->
+
+    <select id="getOrderBySid"  resultType="Order">
+        select * from orders where sh_sid=#{sid};
+    </select>
+</mapper>

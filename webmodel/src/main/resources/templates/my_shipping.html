@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>我的购物车</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap-combined.min.css}"/>
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap-3.3.7-dist/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/bootstrap-3.3.7-dist/js/bootstrap.min.js}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"/>
+    <script>
+        $(function () {
+            var z_price="";
+            $(document).ready(function () {
+                var tbody=window.document.getElementById("tbody-result");
+                $.ajax({
+                    url:"http://localhost:8082/gra/my_shipping.action",
+                    type:"post",
+                    dataType:"text",
+                    success:function (data) {
+                        var arr=eval('('+data+')');
+                        var str="";
+                        var cbox_="cbox_";
+                        for(index in arr) {
+                            var bianhhao = parseInt(index) + 1;
+                            var sh_sid = arr[index].sh_sid;
+                            var good_name = arr[index].good_name;
+                            var good_gid=arr[index].good_gid;
+                            var good_p1 = arr[index].good_p1;
+                            var good_jianjie = arr[index].good_jianjie;
+                            var good_price = arr[index].good_price;
+                            str += "<tr><td id="+cbox_+index+"></td><td>" + bianhhao + "</td><td>" + good_name + "</td><td><img src=" + good_p1 + "></img></td><td>"
+                                +good_jianjie+"</td><td>"+ good_price + "</td><td><button value=" + good_gid + " id=" + index + ">移除商品</button>"
+                            "</td></tr>";
+                            tbody.innerHTML = str;
+                            z_price=z_price*1+good_price*1;
+                        }
+                        for(i in arr){
+                            $(eval("cbox_"+i)).append('<input class="qx" type="checkbox" value="'+arr[i].good_gid+'" name="cbox"/>')
+                        }
+                        $("#z_price").append("￥："+z_price)
+
+                    }
+                })
+            })
+            //结算商品
+            $("#jiesuan").click(function () {
+                var checkID=new Array();
+                $("input[name='cbox']:checked").each(function () {
+                    checkID.push(this.value)
+                })
+                $.ajax({
+                    url:"http://localhost:8082/gra/generate_order.action",
+                    type:"post",
+                    data:{"checkID":checkID,"z_price":z_price},
+                    dataType:"text",
+                    traditional: true,
+                    success:function (data) {
+                        if(data=="结算成功"){
+                            alert(data)
+                            window.location.href="/web/my_order"
+                        }else {
+                            alert(data)
+                        }
+                    }
+                })
+            })
+            //移除商品
+            $(document).on('click','button',function () {
+                var good_gid=this.value;
+                var res=confirm("确定要移除吗")
+                if(res){
+                    $.ajax({
+                        url:"http://localhost:8082/gra/remove_ship.action",
+                        type:"post",
+                        data:{"good_gid":good_gid},
+                        dataType:"text",
+                        success:function (data) {
+                            if(data=="移除成功"){
+                                alert(data)
+                                window.location.href="/web/my_shipping"
+                            }else {}
+                        }
+                    })
+                }else {
+                }
+            })
+            //复选框全选事件
+            $("#quanxuan").click(function(){//给全选按钮加上点击事件
+                var xz = $(this).prop("checked");//判断全选按钮的选中状态
+                var ck = $(".qx").prop("checked",xz);  //让class名为qx的选项的选中状态和全选按钮的选中状态一致。
+            })
+            $("#anzx").click(function () {
+                $.ajax({
+                    url:"http://localhost:8082/gra/per_info_success.action",
+                    type:"post",
+                    dataType:"text",
+                    success:function (data) {
+                        var userinfo=eval('('+data+')');
+                        var email_state=userinfo.email_state;
+                        if (email_state=="已认证") {
+                            window.location.href="/web/certified_success"
+                        }else {
+                            window.location.href="/web/security_center"
+                        }
+
+                    }
+                })
+            })
+            //判断商铺是否申请
+            $("#sqsp").click(function () {
+                $.ajax({
+                    url: "http://localhost:8082/gra/user_shop.action",
+                    type: "post",
+                    dataType: "text",
+                    success: function (data) {
+                        var usershop = eval('(' + data + ')');
+                        var shop_state = usershop.shop_state;
+                        if (shop_state == "审核中"||shop_state=="已审核") {
+                            window.location.href = "/web/apply_shop_success"
+                        } else {
+                            window.location.href = "/web/apply_shop"
+                        }
+
+                    }
+                })
+            })
+            //判断商铺是否审核通过
+            $("#myshop").click(function () {
+                $.ajax({
+                    url:"http://localhost:8082/gra/user_shop.action",
+                    type:"post",
+                    dataType:"text",
+                    success:function (data) {
+                        var shop=eval('('+data+')');
+                        var shop_state=shop.shop_state;
+                        if(shop_state=="已审核"){
+                            window.location.href="/web/my_shop"
+                        }else if (shop_state=="审核中") {
+                            alert("您申请的商铺正在审核中，请耐心等待！！")
+                        }else {
+                            alert("您还未申请商铺")
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                    个人中心
+                </h1>
+            </div>
+            <div class="row-fluid">
+                <div class="span2">
+                    <ul class="nav nav-list">
+                        <li class="">
+                            <a href="/web/">返回首页</a>
+                        </li>
+                        <li class="nav-header">
+                            会员中心
+                        </li>
+                        <li>
+                            <a href="/web/member">用户信息</a>
+                        </li>
+                        <li>
+                            <a href="/web/perfect_information">完善基本信息</a>
+                        </li>
+                        <li>
+                            <a href="#" id="anzx">安全中心</a>
+                        </li>
+                        <li class="nav-header">
+                            购物车
+                        </li>
+                        <li class="active">
+                            <a href="#">我的购物车</a>
+                        </li>
+                        <li class="nav-header">
+                            订单中心
+                        </li>
+
+                        <li>
+                            <a href="/web/my_order">我的订单</a>
+                        </li>
+                        <li>
+                            <a href="/web/tj_address">收货地址</a>
+                        </li>
+                        <li class="nav-header">
+                            店铺管理
+                        </li>
+                        <li>
+                            <a href="#" id="sqsp">申请商铺</a>
+                        </li>
+                        <li>
+                            <a href="#" id="myshop">进入商铺</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="span10">
+                    <h3 contenteditable="true">商品</h3>
+                    <hr/>
+                    <form action="" method="post">
+                    <table class="table" id="tab" contenteditable="true">
+                        <thead>
+                        <tr>
+                            <th><input id="quanxuan" type="checkbox"/></th>
+                            <th>编号</th>
+                            <th>商品名称</th>
+                            <th>商品图片</th>
+                            <th>商品简介</th>
+                            <th>价格</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody-result">
+                        </tbody>
+                    </table>
+                        <hr/>
+                        总价格：<p style="color: red" id="z_price"></p>
+                        <input type="button" id="jiesuan" value="结算"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{js/canvas-nest.js}" color="208,55,66" opacity="0.7" count="125"></script>
+</body>
+</html>
